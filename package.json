@@ -1,6 +1,6 @@
 {
   "name": "hubot-bearychat",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A BearyChat adapter for hubot",
   "main": "./src/bearychat",
   "keywords": [
@@ -39,14 +39,14 @@
   },
   "contributors": [
     {
-      "name" : "yuanbohan",
-      "email" : "yuanbo.han@bearyinnovative.com",
-      "url" : "https://github.com/yuanbohan"
+      "name": "yuanbohan",
+      "email": "yuanbo.han@bearyinnovative.com",
+      "url": "https://github.com/yuanbohan"
     },
     {
-      "name" : "timnew",
-      "email" : "timnewcnyn@gmail.com",
-      "url" : "http://timnew.me"
+      "name": "timnew",
+      "email": "timnewcnyn@gmail.com",
+      "url": "http://timnew.me"
     }
   ]
 }
