@@ -38,13 +38,13 @@ class Bearychat extends Adapter
 
     return @robot.logger.error "Invalid token for this request" unless valid
 
-    user = new User username, {team: subdomain, token: token, sender: sender, vchannel: vchannel, username: username}
+    user = new User sender, {team: subdomain, token: token, sender: sender, vchannel: vchannel, name: username}
 
     @receive new TextMessage user, text, key
 
   packMsg: (isReply, envelope, strings...) ->
     text = strings.join('\n')
-    text = if isReply then "@#{envelope.user.username}: #{text}" else text
+    text = if isReply then "@#{envelope.user.name}: #{text}" else text
     {sender, vchannel} = envelope.user
     JSON.stringify {sender: sender, vchannel: vchannel, text: text}
 
