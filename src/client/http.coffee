@@ -12,7 +12,7 @@ class HTTPClient
 
     @receiveMsg()
 
-    @
+    return this
 
   # Public: Send a message
   sendMsg: (envelope, msg) ->
