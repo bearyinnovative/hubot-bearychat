@@ -2,14 +2,12 @@
 
 class HTTPClient
 
+  constructor: (@adapter, @robot, @tokens) ->
+
   # Public: Start HTTP client
   #
   # Returns client itself
-  run: (adapter, robot, tokens) ->
-    @adapter = adapter
-    @robot = robot
-    @tokens = tokens
-
+  run: () ->
     @receiveMsg()
 
     return this

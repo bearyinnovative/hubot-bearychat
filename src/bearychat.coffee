@@ -19,7 +19,8 @@ class Bearychat extends Adapter
     tokens = process.env.HUBOT_BEARYCHAT_TOKENS
     return @robot.logger.error 'No BearyChat tokens provided to Hubot' unless tokens
     
-    @client = (new HTTPClient).run @, @robot, tokens.split(',')
+    @client = new HTTPClient @, @robot, tokens.split(',')
+    @client.run()
 
     @emit 'connected'
     
