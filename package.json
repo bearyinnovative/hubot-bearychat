@@ -3,6 +3,9 @@
   "version": "0.2.2",
   "description": "BearyChat adapter for hubot",
   "main": "./src/bearychat",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register --reporter spec"
+  },
   "keywords": [
     "hubot",
     "adapter",
@@ -17,13 +20,14 @@
   "bugs": {
     "url": "https://github.com/bearyinnovative/hubot-bearychat/issues"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "hubot": ">=2.0"
   },
   "devDependencies": {
-    "coffee-script": ">=1.2.0"
+    "coffee-script": ">=1.2.0",
+    "mocha": "^2.4.5",
+    "should": "^8.3.1"
   },
   "contributors": [
     {
