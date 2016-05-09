@@ -9,11 +9,11 @@ class Bearychat extends Adapter
 
   send: (envelope, strings...) ->
     msg = @client.packMsg(false, envelope, strings)
-    @client.sendMsg(envelop, msg)
+    @client.sendMsg(envelope, msg)
 
   reply: (envelope, strings...) ->
     msg = @client.packMsg(true, envelope, strings)
-    @client.sendMsg(envelop, msg)
+    @client.sendMsg(envelope, msg)
 
   run: ->
     tokens = process.env.HUBOT_BEARYCHAT_TOKENS
