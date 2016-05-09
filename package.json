@@ -20,7 +20,9 @@
   "bugs": {
     "url": "https://github.com/bearyinnovative/hubot-bearychat/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ws": "^1.1.0"
+  },
   "peerDependencies": {
     "hubot": ">=2.0"
   },
