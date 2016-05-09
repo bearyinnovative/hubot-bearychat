@@ -25,12 +25,12 @@ class Bearychat extends Adapter
     else
       @client = new RTMClient
 
-    @client.run tokens, @robot
-
     @client.on EventConnected, () => @emit 'connected'
-    @client.on EventMessage, @receive
-    @client.on EventClosed, @handleClosed
-    @client.on EventError, @handleError
+    @client.on EventMessage, @receive.bind @
+    @client.on EventClosed, @handleClosed.bind @
+    @client.on EventError, @handleError.bind @
+
+    @client.run tokens, @robot
 
   handleClosed: () ->
     @robot.logger.error 'client closed'
