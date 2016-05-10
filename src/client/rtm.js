@@ -1,20 +1,15 @@
 'use strict';
 
-const hubot = require('hubot');
-const User = hubot.User;
-const TextMessage = hubot.TextMessage;
+const {User, TextMessage}= require('hubot');
 
 const WebSocket = require('ws');
 
-const BaseClient = require('./base').BaseClient;
+const {BaseClient} = require('./base');
 
-const events = require('./events');
-const EventMessage = events.EventMessage;
-const EventConnected = events.EventConnected;
-const EventError = events.EventError;
-const EventClosed = events.EventClosed;
-const EventSignedIn = events.EventSignedIn;
-const EventUserChanged = events.EventUserChanged;
+const {
+  EventMessage, EventConnected, EventError,
+  EventClosed, EventSignedIn, EventUserChanged,
+} = require('./events');
 
 const MessageType = {
   Ping: 'ping',
@@ -64,8 +59,10 @@ class RTMClient extends BaseClient {
 
     this.rtmStart(this.token)
       .then((rv) => {
-        const wsHost = rv.result.ws_host;
-        const user = rv.result.user;
+        const {
+          user,
+          ws_host: wsHost,
+        } = rv.result.ws_host;
         if (!wsHost || !user) {
           this.emit(EventError, rv);
           return;
@@ -124,10 +121,13 @@ class RTMClient extends BaseClient {
 
   decodeText(text) {
     // Decode mention.
-    text = text.replace(/(@)<=(.*)=\>/g, (_, mention, name) => {
-      if (name === this.user.id) return this.robot.name;
-      return name;
-    });
+    text = text.replace(
+      /(@)<=(.*)=\>/g,
+      (_, mention, name) => {
+        if (name === this.user.id) return this.robot.name;
+        return name;
+      }
+    );
 
     return text;
   }

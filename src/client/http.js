@@ -1,15 +1,9 @@
 'use strict';
 
-const hubot = require('hubot');
-const User = hubot.User;
-const TextMessage = hubot.TextMessage;
+const {User, TextMessage} = require('hubot');
 
-const BaseClient = require('./base').BaseClient;
-
-const events = require('./events');
-const EventMessage = events.EventMessage;
-const EventConnected = events.EventConnected;
-const EventError = events.EventError;
+const {BaseClient} = require('./base');
+const {EventMessage, EventConnected, EventError} = require('./events');
 
 class HTTPClient extends BaseClient {
 
@@ -22,8 +16,7 @@ class HTTPClient extends BaseClient {
   }
 
   sendMsg(envelope, message) {
-    const team = envelope.user.team;
-    const token = envelope.user.token;
+    const {team, token} = envelope.user.team;
     const url = `https://${team}.bearychat.com/api/hubot_hook/${token}`;
 
     return this.robot
