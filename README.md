@@ -9,17 +9,18 @@ This is a [Hubot](http://hubot.github.com/) adapter to use with [BearyChat](http
 - `cd /path/to/hubot`
 - `yo hubot`
 - `npm install hubot-bearychat --save`
-- Check out the [hubot docs](https://github.com/github/hubot/tree/master/docs) for further guidance on how to build your bot
+- Check out the [hubot docs](https://github.com/github/hubot/tree/master/docs) for further guidance on how to build your bot.
 
 #### Testing your bot locally
 
-- `HUBOT_BEARYCHAT_TOKENS=TOKEN1,TOKEN2 ./bin/hubot -a bearychat`
+- `HUBOT_BEARYCHAT_TOKENS=TOKEN1,TOKEN2 HUBOT_BEARYCHAT_MODE=http ./bin/hubot -a bearychat`
 
 ## Configuration
 
 This adapter uses the following environment variables:
 
- - `HUBOT_BEARYCHAT_TOKENS` - these are hubot tokens in BearyChat, multi tokens are separated by comma
+ - `HUBOT_BEARYCHAT_TOKENS` - these are hubot tokens in BearyChat, multiple tokens are separated by comma.
+ - `HUBOT_BEARYCHAT_MODE` - hubot connection mode, supports `http` now.
 
 ## Copyright
 
