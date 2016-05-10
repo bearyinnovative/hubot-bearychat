@@ -62,7 +62,7 @@ class RTMClient extends BaseClient {
         const {
           user,
           ws_host: wsHost,
-        } = rv.result.ws_host;
+        } = rv.result;
         if (!wsHost || !user) {
           this.emit(EventError, rv);
           return;
