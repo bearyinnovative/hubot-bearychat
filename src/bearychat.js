@@ -28,10 +28,10 @@ class BearyChat extends Adapter {
     tokens = tokens.split(',');
 
     const mode = process.env.HUBOT_BEARYCHAT_MODE;
-    if (mode && mode.toLowerCase() === 'http') {
-      this.client = new HTTPClient();
-    } else {
+    if (mode && mode.toLowerCase() === 'rtm') {
       this.client = new RTMClient();
+    } else {
+      this.client = new HTTPClient();
     }
 
     this.client.on(EventConnected, () => this.emit('connected'));
