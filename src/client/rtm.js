@@ -190,3 +190,4 @@ class RTMClient extends BaseClient {
 }
 
 exports.RTMClient = RTMClient;
+exports.MessageType = MessageType;
