@@ -45,6 +45,9 @@ class RTMClient extends BaseClient {
     this.rtmStartUrl = (opts.rtmStartUrl ||
                         process.env.HUBOT_BEARYCHAT_RTM_START_URL ||
                         'https://rtm.bearychat.com/start');
+    this.rtmPostMessageUrl = (opts.rtmPostMessageUrl ||
+                              process.env.HUBOT_BEARYCHAT_RTM_POST_MESSAGE_URL ||
+                              'https://rtm.bearychat.com/message');
   }
 
   run(tokens, robot) {
@@ -81,6 +84,24 @@ class RTMClient extends BaseClient {
 
   sendMsg(envelope, message) {
     this.wsSend(message);
+  }
+
+  postMsg(envelope, message) {
+    message.token = this.token;
+    message.vchannel = envelope.user.vchannel;
+
+    return new Promise((resolve, reject) => {
+      this.robot.http(this.rtmPostMessageUrl)
+        .header('Content-Type', 'application/json')
+        .post(JSON.stringify(message))((err, res, body) => {
+          if (err) return reject(err);
+
+          const resp = JSON.parse(body);
+          if (resp.body !== 0) return reject(resp);
+
+          return resolve(resp);
+        });
+    });
   }
 
   packMsg(isReply, envelope, ...strings) {
