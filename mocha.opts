@@ -1,0 +1,5 @@
+--require should
+--reporter spec
+--harmony
+--recursive
+--compilers js:babel-core/register,coffee:coffee-script/register
