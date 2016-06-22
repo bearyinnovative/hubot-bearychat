@@ -45,13 +45,13 @@ class Bearychat extends Adapter
   packMsg: (isReply, envelope, strings...) ->
     text = strings[0]
     text = if isReply then "@#{envelope.user.name}: #{text}" else text
-    attachments = if strings[1]? then strings[1] else null
+    attachments = strings[1] or null
     {token, vchannel} = envelope.user
     JSON.stringify {token: token, vchannel: vchannel, text: text, attachments: attachments}
 
   sendMsg: (envelope, msg) ->
     @robot.http("https://bearychat.com/api/rtm/message")
-          .header('Content-Type', 'application/json;charset=UTF-8')
+          .header('Content-Type', 'application/json')
           .post(msg) (err, res, body) =>
             @robot.logger.debug body
 
