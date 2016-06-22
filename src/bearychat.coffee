@@ -6,11 +6,11 @@ class Bearychat extends Adapter
     @robot = robot
 
   send: (envelope, strings...) ->
-    msg = @packMsg(false, envelope, strings)
+    msg = @packMsg(false, envelope, strings...)
     @sendMsg(envelope, msg)
 
   reply: (envelope, strings...) ->
-    msg = @packMsg(true, envelope, strings)
+    msg = @packMsg(true, envelope, strings...)
     @sendMsg(envelope, msg)
 
   run: ->
@@ -43,16 +43,14 @@ class Bearychat extends Adapter
     @receive new TextMessage user, text, key
 
   packMsg: (isReply, envelope, strings...) ->
-    text = strings.join('\n')
+    text = strings[0]
     text = if isReply then "@#{envelope.user.name}: #{text}" else text
-    {sender, vchannel} = envelope.user
-    JSON.stringify {sender: sender, vchannel: vchannel, text: text}
+    attachments = strings[1] or null
+    {token, vchannel} = envelope.user
+    JSON.stringify {token: token, vchannel: vchannel, text: text, attachments: attachments}
 
   sendMsg: (envelope, msg) ->
-    {team, token} = envelope.user
-    url = "https://#{team}.bearychat.com/api/hubot_hook/#{token}"
-
-    @robot.http(url)
+    @robot.http("https://rtm.bearychat.com/message")
           .header('Content-Type', 'application/json')
           .post(msg) (err, res, body) =>
             @robot.logger.debug body
