@@ -50,7 +50,7 @@ class Bearychat extends Adapter
     JSON.stringify {token: token, vchannel: vchannel, text: text, attachments: attachments}
 
   sendMsg: (envelope, msg) ->
-    @robot.http("https://bearychat.com/api/rtm/message")
+    @robot.http("https://rtm.bearychat.com/message")
           .header('Content-Type', 'application/json')
           .post(msg) (err, res, body) =>
             @robot.logger.debug body
