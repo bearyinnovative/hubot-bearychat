@@ -124,17 +124,19 @@ class RTMClient extends BaseClient {
   }
 
   receiveMsgCallback(message) {
+    const fromUserId = message.uid || message.robot_id;
+
     // Ignore robot himself.
-    if (message.uid === this.user.id) return;
+    if (fromUserId === this.user.id) return;
 
     const text = this.decodeText(message.text);
 
-    const user = new User(message.uid, {
-      sender: message.uid,
+    const user = new User(fromUserId, {
+      sender: fromUserId,
       vchannel: message.vchannel_id,
       channel: message.channel_id,
       type: message.type,
-      name: message.uid,
+      name: fromUserId,
     });
 
     this.emit(EventMessage, new TextMessage(user, text, message.key));
