@@ -12,7 +12,7 @@ module.exports = (robot) ->
       title: "attachment title",
       text: "attachment text",
       color: "#ffa500",
-      images: [{url: "http://img3.douban.com/icon/ul15067564-30.jpg"}]
+      images: [{url: "http://img7.doubanio.com/icon/ul15067564-30.jpg"}]
     }]
     # res.reply text, attachments
     res.send text, attachments
