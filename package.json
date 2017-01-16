@@ -18,6 +18,7 @@
     "url": "https://github.com/bearyinnovative/hubot-bearychat/issues"
   },
   "dependencies": {
+    "bearychat": "^0.1.0"
   },
   "peerDependencies": {
     "hubot": ">=2.0"

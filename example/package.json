@@ -1,0 +1,14 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "private": true,
+  "author": "hbc <bcxxxxxx@gmail.com>",
+  "description": "example for hubot-bearychat",
+  "dependencies": {
+    "hubot": "^2.19.0",
+    "hubot-bearychat": "file:../"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
+}
