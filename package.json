@@ -27,7 +27,11 @@
   "devDependencies": {
     "coffee-script": ">=1.2.0"
   },
+  "license": "MIT",
   "contributors": [
+    {
+      "name": "hbc"
+    },
     {
       "name": "yuanbohan",
       "email": "yuanbo.han@bearyinnovative.com",
