@@ -1,6 +1,6 @@
 {
   "name": "hubot-bearychat",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "BearyChat adapter for hubot",
   "main": "./src/bearychat",
   "keywords": [
@@ -9,7 +9,6 @@
     "bearychat"
   ],
   "author": "BearyInnovative Technologies, Inc.",
-  "license": "EPL-1.0",
   "repository": {
     "type": "git",
     "url": "git@github.com:bearyinnovative/hubot-bearychat.git"
@@ -18,6 +17,8 @@
     "url": "https://github.com/bearyinnovative/hubot-bearychat/issues"
   },
   "dependencies": {
+    "bearychat": "^0.1.0",
+    "ws": "^1.1.1"
   },
   "peerDependencies": {
     "hubot": ">=2.0"
@@ -25,7 +26,14 @@
   "devDependencies": {
     "coffee-script": ">=1.2.0"
   },
+  "scripts": {
+    "build-doc": "markdown-toc -i README.md && markdown-toc -i README_CN.md"
+  },
+  "license": "MIT",
   "contributors": [
+    {
+      "name": "hbc"
+    },
     {
       "name": "yuanbohan",
       "email": "yuanbo.han@bearyinnovative.com",

@@ -1,62 +1,55 @@
-{Robot, Adapter, User, TextMessage} = require 'hubot'
+{Adapter} = require 'hubot'
 
-class Bearychat extends Adapter
+HTTPClient = require './http_client'
+RTMClient = require './rtm_client'
+{
+  EventConnected,
+  EventMessage,
+  EventClosed,
+  EventError,
+} = require './client_event'
 
-  constructor: (robot) ->
-    @robot = robot
+class BearyChatAdapter extends Adapter
 
   send: (envelope, strings...) ->
-    msg = @packMsg(false, envelope, strings...)
-    @sendMsg(envelope, msg)
+    message = @client.packMessage false, envelope, strings
+    @client.sendMessage envelope, message
 
   reply: (envelope, strings...) ->
-    msg = @packMsg(true, envelope, strings...)
-    @sendMsg(envelope, msg)
+    message = @client.packMessage true, envelope, strings
+    @client.sendMessage envelope, message
 
   run: ->
     tokens = process.env.HUBOT_BEARYCHAT_TOKENS
-    return @robot.logger.error "No BearyChat tokens provided to Hubot" unless tokens
-    @options = {tokens: tokens.split(",")}
+    if not tokens
+      @robot.logger.error 'No BearyChat tokens provided'
+      return
 
-    @receiveMsg()
+    tokens = tokens.split(',')
+    mode = process.env.HUBOT_BEARYCHAT_MODE
+
+    if mode && mode.toLowerCase() is 'http'
+      @robot.logger.info 'Connect using HTTP mode'
+      @client = new HTTPClient
+    else
+      @robot.logger.info 'Connect using RTM mode'
+      @client = new RTMClient
+
+    @client.on EventConnected, @handleConnected.bind(@)
+    @client.on EventMessage, @receive.bind(@)
+    @client.on EventClosed, @handleClosed.bind(@)
+    @client.on EventError, @handleError.bind(@)
+
+    @client.run tokens, @robot
+
+  handleConnected: ->
     @emit 'connected'
-    
 
-  receiveMsg: =>
-    @robot.router.post '/bearychat', @callback
+  handleClosed: ->
+    @robot.logger.error 'client closed'
 
-  callback: (req, res) =>
-    body = req.body
-    return @robot.logger.error "No body provided for this request" unless body
-
-    {subdomain, token, sender, vchannel, username, text, key} = body
-    text = "#{@robot.name} #{text}"
-
-    valid = @isValidToken(token)
-    status = if valid then 200 else 401
-    res.status(status).end() # at once
-
-    return @robot.logger.error "Invalid token for this request" unless valid
-
-    user = new User sender, {team: subdomain, token: token, sender: sender, vchannel: vchannel, name: username}
-
-    @receive new TextMessage user, text, key
-
-  packMsg: (isReply, envelope, strings...) ->
-    text = strings[0]
-    text = if isReply then "@#{envelope.user.name}: #{text}" else text
-    attachments = strings[1] or null
-    {token, vchannel} = envelope.user
-    JSON.stringify {token: token, vchannel: vchannel, text: text, attachments: attachments}
-
-  sendMsg: (envelope, msg) ->
-    @robot.http("https://rtm.bearychat.com/message")
-          .header('Content-Type', 'application/json')
-          .post(msg) (err, res, body) =>
-            @robot.logger.debug body
-
-  isValidToken: (token) ->
-    token in @options.tokens
+  handleError: (e) ->
+    @robot.logger.error "client error #{e}"
 
 exports.use = (robot) ->
-  new Bearychat robot
+  new BearyChatAdapter(robot)
