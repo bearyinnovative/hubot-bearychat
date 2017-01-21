@@ -28,12 +28,12 @@ class BearyChatAdapter extends Adapter
     tokens = tokens.split(',')
     mode = process.env.HUBOT_BEARYCHAT_MODE
 
-    if mode && mode.toLowerCase() is 'rtm'
-      @robot.logger.info 'Connect using RTM mode'
-      @client = new RTMClient
-    else
+    if mode && mode.toLowerCase() is 'http'
       @robot.logger.info 'Connect using HTTP mode'
       @client = new HTTPClient
+    else
+      @robot.logger.info 'Connect using RTM mode'
+      @client = new RTMClient
 
     @client.on EventConnected, @handleConnected.bind(@)
     @client.on EventMessage, @receive.bind(@)

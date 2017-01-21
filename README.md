@@ -34,13 +34,38 @@ $ ./bin/hubot -a bearychat
 
 ![art/bot_chat.png](art/bot_chat.png)
 
+You can also refer [example/](example) for sample setup.
+
 ## Mode
 
 ### RTM mode
 
+RTM mode uses BearyChat's RTM api and WebSocket as message transport protocol.
+In this mode, hubot can receive all messages in real time and hear any messages
+from channels it had joined.
+
+To enable RTM mode, you should specify environment variable
+`HUBOT_BEARYCHAT_MODE=rtm` before running the hubot.
+
+`hubot-bearychat` uses rtm mode by default.
+
 ### HTTP mode
 
+HTTP mode is the legacy message transport protocol. In this mode, hubot can
+only receive messages that himself was mentioned (e.g. `@hubot how do you do`),
+and you need to set the hubot hosted http service url in the hubot settings form.
+
+To enable HTTP mode, you should specify environment variable
+`HUBOT_BEARYCHAT_MODE=http` before running the hubot.
+
 ## Configuration
+
+Available configurations are injected via environment variables:
+
+| envvar | description |
+|:------:|:------------|
+| `HUBOT_BEARYCHAT_MODE` | running mode for the hubot, by default is `rtm` |
+| `HUBOT_BEARYCHAT_TOKENS` | hubot token, required for running hubot |
 
 ## LICENSE
 
