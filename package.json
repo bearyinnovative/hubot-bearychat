@@ -9,7 +9,6 @@
     "bearychat"
   ],
   "author": "BearyInnovative Technologies, Inc.",
-  "license": "EPL-1.0",
   "repository": {
     "type": "git",
     "url": "git@github.com:bearyinnovative/hubot-bearychat.git"
@@ -26,6 +25,9 @@
   },
   "devDependencies": {
     "coffee-script": ">=1.2.0"
+  },
+  "scripts": {
+    "build-doc": "markdown-toc -i README.md && markdown-toc -i README_CN.md"
   },
   "license": "MIT",
   "contributors": [

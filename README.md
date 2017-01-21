@@ -2,6 +2,25 @@
 
 This is a [Hubot](http://hubot.github.com/) adapter to use with [BearyChat](https://bearychat.com).
 
+![Development Status](https://img.shields.io/badge/status-0.3.0-green.svg?style=flat-square)
+
+[中文文档](./README_CN.md)
+
+<!-- toc -->
+
+- [5 Minutes Setup](#5-minutes-setup)
+  * [Step 1. get ya a "hubot token"](#step-1-get-ya-a-hubot-token)
+  * [Step 2. bootstrap your secret hubot project with yeoman](#step-2-bootstrap-your-secret-hubot-project-with-yeoman)
+  * [Step 3. copy your hubot token and start it](#step-3-copy-your-hubot-token-and-start-it)
+  * [Step 4. start chatting with your bot!](#step-4-start-chatting-with-your-bot)
+- [Mode](#mode)
+  * [RTM mode](#rtm-mode)
+  * [HTTP mode](#http-mode)
+- [Configuration](#configuration)
+- [LICENSE](#license)
+
+<!-- tocstop -->
+
 ## 5 Minutes Setup
 
 ### Step 1. get ya a "hubot token"
