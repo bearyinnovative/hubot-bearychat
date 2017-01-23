@@ -2,6 +2,7 @@
 
 [BearyChat](https://bearychat.com) hubot adapter 实现
 
+[![@BearyChat](http://openapi.beary.chat/badge.svg)](http://openapi.beary.chat/join)
 ![Development Status](https://img.shields.io/badge/status-0.3.0-green.svg?style=flat-square)
 
 <!-- toc -->
