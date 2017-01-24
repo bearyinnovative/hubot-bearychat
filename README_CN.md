@@ -3,7 +3,7 @@
 [BearyChat](https://bearychat.com) hubot adapter 实现
 
 [![@BearyChat](http://openapi.beary.chat/badge.svg)](http://openapi.beary.chat/join)
-[![npm version](https://badge.fury.io/js/hubot-bearychat.svg)](https://badge.fury.io/js/hubot-bearychat)
+[![npm version](https://badge.fury.io/js/hubot-bearychat.svg)](https://npmjs.com/package/hubot-bearychat)
 
 <!-- toc -->
 
