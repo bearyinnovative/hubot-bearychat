@@ -1,5 +1,4 @@
 EventEmitter = require 'events'
-util = require 'util'
 {
   User,
   TextMessage,
@@ -11,10 +10,7 @@ util = require 'util'
   EventError,
 } = require './client_event'
 
-class HTTPClient
-  constructor: () ->
-    EventEmitter.call(@)
-
+class HTTPClient extends EventEmitter
   run: (@tokens, @robot) ->
     @robot.router.post '/bearychat', @receiveMessageCallback.bind(@)
 
@@ -64,7 +60,5 @@ class HTTPClient
 
   isValidToken: (token) ->
     @tokens.indexOf(token) != -1
-
-util.inherits HTTPClient, EventEmitter
 
 module.exports = HTTPClient

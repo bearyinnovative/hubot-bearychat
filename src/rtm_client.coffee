@@ -1,5 +1,4 @@
 EventEmitter = require 'events'
-util = require 'util'
 WebSocket = require 'ws'
 { User, TextMessage } = require 'hubot'
 { rtm } = require 'bearychat'
@@ -23,10 +22,8 @@ decodeMention = (text, userId, replaceName) ->
       mentionedUserId
   )
 
-class RTMClient
+class RTMClient extends EventEmitter
   constructor: (opts) ->
-    EventEmitter.call(@)
-
     opts = opts || {}
 
     @rtmPingInterval = opts.rtmPingInterval or 2000
@@ -109,7 +106,5 @@ class RTMClient
       message: message
 
     @emit EventMessage, new TextMessage messageUser, messageText, message.key
-
-util.inherits RTMClient, EventEmitter
 
 module.exports = RTMClient
