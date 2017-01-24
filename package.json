@@ -1,6 +1,6 @@
 {
   "name": "hubot-bearychat",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "BearyChat adapter for hubot",
   "main": "./src/bearychat",
   "keywords": [
