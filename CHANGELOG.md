@@ -2,6 +2,12 @@
 - Name: hubot-bearychat
 ----
 
+# 0.4.0 / 2017-02-23
+
+## Added
+
+- 支持发送 attachemnt #14
+
 # 0.3.1 / 2017-01-24
 
 ## Fixed
