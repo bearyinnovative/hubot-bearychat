@@ -17,8 +17,10 @@ class HTTPClient extends EventEmitter
     @emit EventConnected
 
   sendMessage: (envelope, message) ->
-    {team, token} = envelope.user
-    url = "https://#{team}.bearychat.com/api/hubot_hook/#{token}"
+    {_,token} = envelope.user
+    url = "https://bearychat.com/api/rtm/message"
+    message = Object.assign {token:token},message
+    message = JSON.stringify message
 
     @robot.http(url)
       .header('Content-Type', 'application/json')
@@ -27,12 +29,11 @@ class HTTPClient extends EventEmitter
         @emit(EventError, err) if err
 
   packMessage: (isReply, envelope, strings) ->
-    text = strings.join '\n'
+    [text,opts] = strings
+    opts = opts || {}
     text = "#{envelope.user.name}: #{text}" if isReply
-    JSON.stringify
-      sender: envelope.user.sender
-      vchannel: envelope.user.vchannel
-      text: text
+    Object.assign {sender: envelope.user.sender,vchannel: envelope.user.vchannel,text: text},opts
+
 
   receiveMessageCallback: (req, res) ->
     body = req.body
