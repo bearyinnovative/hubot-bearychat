@@ -3,3 +3,4 @@ node_modules
 .hubot_history
 .editorconfig
 .cs_files
+.idea
