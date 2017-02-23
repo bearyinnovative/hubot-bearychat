@@ -29,9 +29,8 @@ class HTTPClient extends EventEmitter
         @emit(EventError, err) if err
 
   packMessage: (isReply, envelope, [text, opts]) ->
-    opts = opts || {}
     text = "#{envelope.user.name}: #{text}" if isReply
-    Object.assign opts,{sender: envelope.user.sender,vchannel: envelope.user.vchannel,text: text}
+    Object.assign opts || {},{sender: envelope.user.sender,vchannel: envelope.user.vchannel,text: text}
 
 
   receiveMessageCallback: (req, res) ->
