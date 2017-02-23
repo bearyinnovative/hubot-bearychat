@@ -28,11 +28,10 @@ class HTTPClient extends EventEmitter
         @robot.logger.debug(body)
         @emit(EventError, err) if err
 
-  packMessage: (isReply, envelope, strings) ->
-    [text,opts] = strings
+  packMessage: (isReply, envelope, [text, opts]) ->
     opts = opts || {}
     text = "#{envelope.user.name}: #{text}" if isReply
-    Object.assign {sender: envelope.user.sender,vchannel: envelope.user.vchannel,text: text},opts
+    Object.assign opts,{sender: envelope.user.sender,vchannel: envelope.user.vchannel,text: text}
 
 
   receiveMessageCallback: (req, res) ->
