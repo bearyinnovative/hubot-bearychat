@@ -2,6 +2,12 @@
 - Name: hubot-bearychat
 ----
 
+# 0.4.1 / 2017-03-16
+
+## Fixed
+
+- #17 添加缺少的 `EventClosed` 常量
+
 # 0.4.0 / 2017-02-23
 
 ## Added
