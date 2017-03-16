@@ -7,6 +7,7 @@ WebSocket = require 'ws'
   EventConnected,
   EventMessage,
   EventError,
+  EventClosed,
   EventUserChanged,
   EventSignedIn,
 } = require './client_event'
