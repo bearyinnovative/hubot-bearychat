@@ -2,6 +2,12 @@
 - Name: hubot-bearychat
 ----
 
+# 0.4.2 / 2017-03-23
+
+## Fixed
+
+- #19 fix(http_client): missing mention sign
+
 # 0.4.1 / 2017-03-16
 
 ## Fixed
