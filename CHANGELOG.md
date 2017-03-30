@@ -2,6 +2,13 @@
 - Name: hubot-bearychat
 ----
 
+# 0.5.0 / 2017-03-30
+
+## Added
+
+- 更新 bearychat.js 到 1.0.0
+- #20 #12 支持发送 attachment 类型消息
+
 # 0.4.2 / 2017-03-23
 
 ## Fixed
