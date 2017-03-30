@@ -11,6 +11,19 @@ RTMClient = require './rtm_client'
 
 class BearyChatAdapter extends Adapter
 
+  _setupClient: (mode) ->
+    if mode && mode.toLowerCase() is 'http'
+      @robot.logger.info 'Connect using HTTP mode'
+      @client = new HTTPClient
+    else
+      @robot.logger.info 'Connect using RTM mode'
+      @client = new RTMClient
+
+    @client.on EventConnected, @handleConnected.bind(@)
+    @client.on EventMessage, @receive.bind(@)
+    @client.on EventClosed, @handleClosed.bind(@)
+    @client.on EventError, @handleError.bind(@)
+
   send: (envelope, strings...) ->
     message = @client.packMessage false, envelope, strings
     @client.sendMessage envelope, message
@@ -26,19 +39,9 @@ class BearyChatAdapter extends Adapter
       return
 
     tokens = tokens.split(',')
-    mode = process.env.HUBOT_BEARYCHAT_MODE
+    mode = (process.env.HUBOT_BEARYCHAT_MODE || '').toLowerCase()
 
-    if mode && mode.toLowerCase() is 'http'
-      @robot.logger.info 'Connect using HTTP mode'
-      @client = new HTTPClient
-    else
-      @robot.logger.info 'Connect using RTM mode'
-      @client = new RTMClient
-
-    @client.on EventConnected, @handleConnected.bind(@)
-    @client.on EventMessage, @receive.bind(@)
-    @client.on EventClosed, @handleClosed.bind(@)
-    @client.on EventError, @handleError.bind(@)
+    @_setupClient mode
 
     @client.run tokens, @robot
 
