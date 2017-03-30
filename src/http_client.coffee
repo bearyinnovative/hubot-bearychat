@@ -53,6 +53,9 @@ class HTTPClient extends EventEmitter
       sender: body.sender,
       vchannel: body.vchannel,
       name: body.username,
+      room: {
+        vchannelId: body.vchannel,
+      }
     })
 
     @emit(EventMessage, new TextMessage(user, text, body.key))

@@ -16,6 +16,10 @@
   * [RTM mode](#rtm-mode)
   * [HTTP mode](#http-mode)
 - [配置项](#%E9%85%8D%E7%BD%AE%E9%A1%B9)
+- [Hubot 响应](#hubot-%E5%93%8D%E5%BA%94)
+  * [普通回复 `Send`](#%E6%99%AE%E9%80%9A%E5%9B%9E%E5%A4%8D-send)
+  * [at 回复 `Reply`](#at-%E5%9B%9E%E5%A4%8D-reply)
+  * [富文本回复 `bearychat.attachment`](#%E5%AF%8C%E6%96%87%E6%9C%AC%E5%9B%9E%E5%A4%8D-bearychatattachment)
 - [LICENSE](#license)
 
 <!-- tocstop -->
@@ -80,6 +84,59 @@ HTTP 服务地址。
 |:------:|:------------|
 | `HUBOT_BEARYCHAT_MODE` | hubot 使用的底层消息通讯协议，默认为 `rtm` |
 | `HUBOT_BEARYCHAT_TOKENS` | hubot token, 必填 |
+
+## Hubot 响应
+
+### 普通回复 `Send`
+
+Hubot 可以通过 `res.send` 来回复一个消息：
+
+```
+robot.hear /hello/, (res) ->
+  res.send 'hello, world!'
+```
+
+![art/res_send.png](art/res_send.png)
+
+### at 回复 `Reply`
+
+如果 hubot 在回复消息的同时想要提及消息作者，可以使用 `res.reply`:
+
+```
+robot.hear 'how old are you?', (res) ->
+  res.reply 'I am Five!'
+```
+
+![art/res_reply.png](art/res_reply.png)
+
+### 富文本回复 `bearychat.attachment`
+
+如果 hubot 想要回复富文本消息，可以发送 `bearychat.attachment` 事件：
+
+```
+robot.respond '念两句诗', (res) ->
+  robot.emit 'bearychat.attachment',
+    # required
+    message: res.message
+    # requried
+    text: '当时我就念了...'
+    attachments: [
+      {
+        color: '#cb3f20',
+        text: '苟利国家生死以',
+      },
+      {
+        text: '岂因祸福避趋之',
+      },
+      {
+        images: [
+          {url: 'http://example.com/excited.jpg'},
+        ]
+      }
+    ]
+```
+
+![art/res_reply.png](art/res_attachment.png)
 
 ## LICENSE
 
