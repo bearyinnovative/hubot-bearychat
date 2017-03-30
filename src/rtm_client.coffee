@@ -35,8 +35,8 @@ class RTMClient extends EventEmitter
       @robot.logger.error 'No BearyChat RTM token provided'
       return
 
-    @rtmClient = new rtm.Client(@token)
-    @rtmClient.start()
+    rtm.start({token: @token})
+      .then (resp) => resp.json()
       .then ({ user, ws_host }) =>
         @robot.logger.info "Connected as @#{user.name}"
         @user = user
@@ -45,7 +45,7 @@ class RTMClient extends EventEmitter
 
         @connectToRTM ws_host
       .catch (e) =>
-        @emit EventEmitter, e
+        @emit EventError, e
 
   packMessage: (isReply, envelope, strings) ->
     text = strings.join '\n'
