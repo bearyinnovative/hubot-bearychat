@@ -18,6 +18,10 @@ This is a [Hubot](http://hubot.github.com/) adapter to use with [BearyChat](http
   * [RTM mode](#rtm-mode)
   * [HTTP mode](#http-mode)
 - [Configuration](#configuration)
+- [Hubot Interactions](#hubot-interactions)
+  * [Send](#send)
+  * [Reply](#reply)
+  * [`bearychat.attachment`](#bearychatattachment)
 - [LICENSE](#license)
 
 <!-- tocstop -->
@@ -86,6 +90,59 @@ Available configurations are injected via environment variables:
 |:------:|:------------|
 | `HUBOT_BEARYCHAT_MODE` | running mode for the hubot, by default is `rtm` |
 | `HUBOT_BEARYCHAT_TOKENS` | hubot token, required for running hubot |
+
+## Hubot Interactions
+
+### Send
+
+Hubot can response a message with `res.send`:
+
+```
+robot.hear /hello/, (res) ->
+  res.send 'hello, world!'
+```
+
+![art/res_send.png](art/res_send.png)
+
+### Reply
+
+If hubot want to response a message and mention the caller, use `res.reply`:
+
+```
+robot.hear 'how old are you?', (res) ->
+  res.reply 'I am Five!'
+```
+
+![art/res_reply.png](art/res_reply.png)
+
+### `bearychat.attachment`
+
+If hubot want to response more than text, emit `bearychat.attachment`:
+
+```
+robot.respond '念两句诗', (res) ->
+  robot.emit 'bearychat.attachment',
+    # required
+    message: res.message
+    # requried
+    text: '当时我就念了...'
+    attachments: [
+      {
+        color: '#cb3f20',
+        text: '苟利国家生死以',
+      },
+      {
+        text: '岂因祸福避趋之',
+      },
+      {
+        images: [
+          {url: 'http://example.com/excited.jpg'},
+        ]
+      }
+    ]
+```
+
+![art/res_reply.png](art/res_attachment.png)
 
 ## LICENSE
 
