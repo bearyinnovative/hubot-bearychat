@@ -50,9 +50,9 @@ class RTMClient extends EventEmitter
   packMessage: (isReply, envelope, strings) ->
     text = strings.join '\n'
     if isReply
-      text = "@<=#{envelope.user.id}=> #{text}"
-
-    rtm.message.refer envelope.user.message, text
+      rtm.message.refer envelope.user.message, text
+    else
+      rtm.message.reply envelope.user.message, text
 
   sendMessage: (envelope, message) ->
     @writeWebSocket message
