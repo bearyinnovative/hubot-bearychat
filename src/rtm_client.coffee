@@ -17,7 +17,7 @@ shouldHandleThisMessage = (message) ->
 
 decodeMention = (text, userId, replaceName) ->
   text.replace(
-    /(@)<=(.*)=\>/g,
+    /(@)<=(.*?)=\>/g,
     (_, mentionMark, mentionedUserId) ->
       return replaceName if mentionedUserId is userId
       mentionedUserId
