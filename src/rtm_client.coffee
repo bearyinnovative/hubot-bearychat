@@ -24,7 +24,11 @@ decodeMention = (text, userId, replaceName) ->
       mentionedUserId
   )
 
+
 class RTMClient extends EventEmitter
+  # a retry flow contains 3 parts: backoff waiting, ws url fetching and ws conecting.
+  # if RTMClient in a retryflow, then @isRetrying must be true else false.
+  # @retryMax is how many times RTMClient can go into retry flow after it disconnected.
   constructor: (opts) ->
     opts = opts || {}
     @retryMax = opts.retryMax or 10
@@ -113,7 +117,7 @@ class RTMClient extends EventEmitter
 
   onWebSocketClose: () ->
     @emit EventClosed
-    @isRetrying = false
+    @isRetrying = false # make sure unsuccessful connection should stop current retryflow
     @rerun()
 
   onWebSocketError: (err) ->
