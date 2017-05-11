@@ -46,16 +46,22 @@ class RTMClient extends EventEmitter
       return
 
     rtm.start({token: @token})
-      .then (resp) => resp.json()
-      .then ({ user, ws_host }) =>
-        @robot.logger.info "Connected as @#{user.name}"
-        @user = user
-        @emit EventUserChanged, @user
-        @emit EventSignedIn
-
-        @connectToRTM ws_host
+      .then (resp) =>
+        resp.json()
+          .then ({ user, ws_host }) =>
+            @robot.logger.info "Connected as @#{user.name}"
+            @user = user
+            @emit EventUserChanged, @user
+            @emit EventSignedIn
+            @connectToRTM ws_host
+          .catch (e) =>
+            @isRetrying = false
+            @emit EventError, e
+            @rerun()
       .catch (e) =>
+        @isRetrying = false
         @emit EventError, e
+        @rerun()
 
   clearPingInterval: () ->
     if @pingInterval
@@ -116,8 +122,8 @@ class RTMClient extends EventEmitter
     @pingInterval = setInterval @rtmPing.bind(@), @rtmPingInterval
 
   onWebSocketClose: () ->
-    @emit EventClosed
     @isRetrying = false # make sure unsuccessful connection should stop current retryflow
+    @emit EventClosed
     @rerun()
 
   onWebSocketError: (err) ->
