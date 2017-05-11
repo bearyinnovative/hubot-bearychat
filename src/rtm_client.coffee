@@ -10,7 +10,7 @@ WebSocket = require 'ws'
   EventClosed,
   EventUserChanged,
   EventSignedIn,
-  EventTimeout,
+  EventTimedout,
 } = require './client_event'
 
 shouldHandleThisMessage = (message) ->
@@ -66,7 +66,7 @@ class RTMClient extends EventEmitter
       , retryBackoff
     else
       @robot.logger.info "Retry #{@retryTimes} times, reach to max, stop retry."
-      @emit EventTimeout
+      @emit EventTimedout
 
   packMessage: (isReply, envelope, strings) ->
     text = strings.join '\n'

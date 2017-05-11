@@ -5,4 +5,4 @@ module.exports =
   EventError: 'error'
   EventUserChanged: 'userchanged'
   EventSignedIn: 'signedin'
-  EventTimeout: 'timeout'
+  EventTimedout: 'timedout'
