@@ -10,6 +10,7 @@ WebSocket = require 'ws'
   EventClosed,
   EventUserChanged,
   EventSignedIn,
+  EventTimeout,
 } = require './client_event'
 
 shouldHandleThisMessage = (message) ->
@@ -26,8 +27,13 @@ decodeMention = (text, userId, replaceName) ->
 class RTMClient extends EventEmitter
   constructor: (opts) ->
     opts = opts || {}
-
+    @retryMax = opts.retryMax or 10
     @rtmPingInterval = opts.rtmPingInterval or 2000
+    @on EventClosed, @rerun.bind(@)
+    @resetRetryTimes()
+
+  resetRetryTimes: () ->
+    @retryTimes = 0
 
   run: (tokens, @robot) ->
     @token = tokens[0]
@@ -44,8 +50,23 @@ class RTMClient extends EventEmitter
         @emit EventSignedIn
 
         @connectToRTM ws_host
+        @resetRetryTimes()
       .catch (e) =>
         @emit EventError, e
+
+  rerun: () ->
+    @retryTimes++
+    if (@retryTimes <= @retryMax)
+      retryBackoff = 1000 * @retryTimes
+      @robot.logger.info "Retry to connect server #{@retryTimes} times, wait for #{retryBackoff / 1000} second"
+      if @pingInterval
+        clearInterval(@pingInterval)
+      setTimeout () =>
+        @run([@token], @robot)
+      , retryBackoff
+    else
+      @robot.logger.info "Retry #{@retryTimes} times, reach to max, stop retry."
+      @emit EventTimeout
 
   packMessage: (isReply, envelope, strings) ->
     text = strings.join '\n'
@@ -81,7 +102,7 @@ class RTMClient extends EventEmitter
     @rtmConn.send JSON.stringify message
 
   onWebSocketOpen: () ->
-    setInterval @rtmPing.bind(@), @rtmPingInterval
+    @pingInterval = setInterval @rtmPing.bind(@), @rtmPingInterval
 
   onWebSocketClose: () ->
     @emit EventClosed
