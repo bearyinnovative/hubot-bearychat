@@ -29,8 +29,8 @@ class RTMClient extends EventEmitter
     opts = opts || {}
     @retryMax = opts.retryMax or 10
     @rtmPingInterval = opts.rtmPingInterval or 2000
-    @on EventClosed, @rerun.bind(@)
     @resetRetryTimes()
+    @isRetrying = false
 
   resetRetryTimes: () ->
     @retryTimes = 0
@@ -54,6 +54,9 @@ class RTMClient extends EventEmitter
         @emit EventError, e
 
   rerun: () ->
+    if @isRetrying
+      return
+    @isRetrying = true
     @retryTimes++
     if (@retryTimes <= @retryMax)
       retryBackoff = 1000 * Math.pow(2, @retryTimes - 1)
@@ -86,8 +89,6 @@ class RTMClient extends EventEmitter
     @rtmConn.on 'error', @onWebSocketError.bind(@)
     @rtmConn.on 'message', @onWebSocketMessage.bind(@)
 
-    @emit EventConnected
-
   nextRTMCallId: () -> @rtmCallId++
 
   rtmPing: () ->
@@ -101,11 +102,15 @@ class RTMClient extends EventEmitter
     @rtmConn.send JSON.stringify message
 
   onWebSocketOpen: () ->
+    @emit EventConnected
+    @isRetrying = false
     @resetRetryTimes()
     @pingInterval = setInterval @rtmPing.bind(@), @rtmPingInterval
 
   onWebSocketClose: () ->
     @emit EventClosed
+    @isRetrying = false
+    @rerun()
 
   onWebSocketError: (err) ->
     @emit EventError, err
