@@ -53,6 +53,10 @@ class RTMClient extends EventEmitter
       .catch (e) =>
         @emit EventError, e
 
+  clearPingInterval: () ->
+    if @pingInterval
+      clearInterval(@pingInterval)
+
   rerun: () ->
     if @isRetrying
       return
@@ -61,8 +65,7 @@ class RTMClient extends EventEmitter
     if (@retryTimes <= @retryMax)
       retryBackoff = 1000 * Math.pow(2, @retryTimes - 1)
       @robot.logger.info "Retry to connect server #{@retryTimes} times, wait for #{retryBackoff / 1000} second"
-      if @pingInterval
-        clearInterval(@pingInterval)
+      @clearPingInterval()
       setTimeout () =>
         @run([@token], @robot)
       , retryBackoff
@@ -105,6 +108,7 @@ class RTMClient extends EventEmitter
     @emit EventConnected
     @isRetrying = false
     @resetRetryTimes()
+    @clearPingInterval()
     @pingInterval = setInterval @rtmPing.bind(@), @rtmPingInterval
 
   onWebSocketClose: () ->
