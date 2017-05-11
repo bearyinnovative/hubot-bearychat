@@ -50,7 +50,6 @@ class RTMClient extends EventEmitter
         @emit EventSignedIn
 
         @connectToRTM ws_host
-        @resetRetryTimes()
       .catch (e) =>
         @emit EventError, e
 
@@ -102,6 +101,7 @@ class RTMClient extends EventEmitter
     @rtmConn.send JSON.stringify message
 
   onWebSocketOpen: () ->
+    @resetRetryTimes()
     @pingInterval = setInterval @rtmPing.bind(@), @rtmPingInterval
 
   onWebSocketClose: () ->
