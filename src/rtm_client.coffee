@@ -57,7 +57,7 @@ class RTMClient extends EventEmitter
   rerun: () ->
     @retryTimes++
     if (@retryTimes <= @retryMax)
-      retryBackoff = 1000 * @retryTimes
+      retryBackoff = 1000 * Math.pow(2, @retryTimes - 1)
       @robot.logger.info "Retry to connect server #{@retryTimes} times, wait for #{retryBackoff / 1000} second"
       if @pingInterval
         clearInterval(@pingInterval)
