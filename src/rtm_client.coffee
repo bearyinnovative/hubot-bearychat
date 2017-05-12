@@ -10,6 +10,7 @@ WebSocket = require 'ws'
   EventClosed,
   EventUserChanged,
   EventSignedIn,
+  EventTimedout,
 } = require './client_event'
 
 shouldHandleThisMessage = (message) ->
@@ -23,11 +24,20 @@ decodeMention = (text, userId, replaceName) ->
       mentionedUserId
   )
 
+
 class RTMClient extends EventEmitter
+  # a retry flow contains 3 parts: backoff waiting, ws url fetching and ws conecting.
+  # if RTMClient in a retryflow, then @isRetrying must be true else false.
+  # @retryMax is how many times RTMClient can go into retry flow after it disconnected.
   constructor: (opts) ->
     opts = opts || {}
-
+    @retryMax = opts.retryMax or 10
     @rtmPingInterval = opts.rtmPingInterval or 2000
+    @resetRetryTimes()
+    @isRetrying = false
+
+  resetRetryTimes: () ->
+    @retryTimes = 0
 
   run: (tokens, @robot) ->
     @token = tokens[0]
@@ -36,16 +46,40 @@ class RTMClient extends EventEmitter
       return
 
     rtm.start({token: @token})
-      .then (resp) => resp.json()
+      .then (resp) =>
+        resp.json()
       .then ({ user, ws_host }) =>
+        unless user and ws_host
+          throw new Error("Fetching WebSocket URL and user data failed")
         @robot.logger.info "Connected as @#{user.name}"
         @user = user
         @emit EventUserChanged, @user
         @emit EventSignedIn
-
         @connectToRTM ws_host
       .catch (e) =>
         @emit EventError, e
+        @isRetrying = false
+        @rerun()
+
+  clearPingInterval: () ->
+    if @pingInterval
+      clearInterval(@pingInterval)
+
+  rerun: () ->
+    if @isRetrying
+      return
+    @isRetrying = true
+    @retryTimes++
+    if (@retryTimes <= @retryMax)
+      retryBackoff = 1000 * Math.pow(2, @retryTimes - 1)
+      @robot.logger.info "Retry to connect server #{@retryTimes} times, wait for #{retryBackoff / 1000} second"
+      @clearPingInterval()
+      setTimeout () =>
+        @run([@token], @robot)
+      , retryBackoff
+    else
+      @robot.logger.info "Retry #{@retryTimes} times, reach to max, stop retry."
+      @emit EventTimedout
 
   packMessage: (isReply, envelope, strings) ->
     text = strings.join '\n'
@@ -66,8 +100,6 @@ class RTMClient extends EventEmitter
     @rtmConn.on 'error', @onWebSocketError.bind(@)
     @rtmConn.on 'message', @onWebSocketMessage.bind(@)
 
-    @emit EventConnected
-
   nextRTMCallId: () -> @rtmCallId++
 
   rtmPing: () ->
@@ -81,10 +113,16 @@ class RTMClient extends EventEmitter
     @rtmConn.send JSON.stringify message
 
   onWebSocketOpen: () ->
-    setInterval @rtmPing.bind(@), @rtmPingInterval
+    @emit EventConnected
+    @isRetrying = false
+    @resetRetryTimes()
+    @clearPingInterval()
+    @pingInterval = setInterval @rtmPing.bind(@), @rtmPingInterval
 
   onWebSocketClose: () ->
     @emit EventClosed
+    @isRetrying = false # make sure unsuccessful connection should stop current retryflow
+    @rerun()
 
   onWebSocketError: (err) ->
     @emit EventError, err
