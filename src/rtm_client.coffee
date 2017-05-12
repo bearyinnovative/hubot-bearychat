@@ -48,16 +48,14 @@ class RTMClient extends EventEmitter
     rtm.start({token: @token})
       .then (resp) =>
         resp.json()
-          .then ({ user, ws_host }) =>
-            @robot.logger.info "Connected as @#{user.name}"
-            @user = user
-            @emit EventUserChanged, @user
-            @emit EventSignedIn
-            @connectToRTM ws_host
-          .catch (e) =>
-            @isRetrying = false
-            @emit EventError, e
-            @rerun()
+      .then ({ user, ws_host }) =>
+        unless user and ws_host
+          throw new Error("WebSocket and user data fetch failed")
+        @robot.logger.info "Connected as @#{user.name}"
+        @user = user
+        @emit EventUserChanged, @user
+        @emit EventSignedIn
+        @connectToRTM ws_host
       .catch (e) =>
         @isRetrying = false
         @emit EventError, e
