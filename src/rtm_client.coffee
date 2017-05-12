@@ -50,15 +50,15 @@ class RTMClient extends EventEmitter
         resp.json()
       .then ({ user, ws_host }) =>
         unless user and ws_host
-          throw new Error("WebSocket and user data fetch failed")
+          throw new Error("Fetching WebSocket URL and user data failed")
         @robot.logger.info "Connected as @#{user.name}"
         @user = user
         @emit EventUserChanged, @user
         @emit EventSignedIn
         @connectToRTM ws_host
       .catch (e) =>
-        @isRetrying = false
         @emit EventError, e
+        @isRetrying = false
         @rerun()
 
   clearPingInterval: () ->
@@ -120,8 +120,8 @@ class RTMClient extends EventEmitter
     @pingInterval = setInterval @rtmPing.bind(@), @rtmPingInterval
 
   onWebSocketClose: () ->
-    @isRetrying = false # make sure unsuccessful connection should stop current retryflow
     @emit EventClosed
+    @isRetrying = false # make sure unsuccessful connection should stop current retryflow
     @rerun()
 
   onWebSocketError: (err) ->
