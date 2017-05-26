@@ -106,10 +106,10 @@ robot.hear /hello/, (res) ->
 
 ### Reply
 
-If hubot want to response a message and mention the caller, use `res.reply`:
+If hubot want to response a message and refer the caller`s message, use `res.reply`:
 
 ```
-robot.hear 'how old are you?', (res) ->
+robot.hear /how old are you?/, (res) ->
   res.reply 'I am Five!'
 ```
 
@@ -120,7 +120,7 @@ robot.hear 'how old are you?', (res) ->
 If hubot want to response more than text, emit `bearychat.attachment`:
 
 ```
-robot.respond '念两句诗', (res) ->
+robot.respond /念两句诗/, (res) ->
   robot.emit 'bearychat.attachment',
     # required
     message: res.message

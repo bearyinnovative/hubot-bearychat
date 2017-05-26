@@ -98,12 +98,12 @@ robot.hear /hello/, (res) ->
 
 ![art/res_send.png](art/res_send.png)
 
-### at 回复 `Reply`
+### 回复 `Reply`
 
-如果 hubot 在回复消息的同时想要提及消息作者，可以使用 `res.reply`:
+如果 hubot 在回复消息的同时想要引用作者的消息，可以使用 `res.reply`:
 
 ```
-robot.hear 'how old are you?', (res) ->
+robot.hear /how old are you?/, (res) ->
   res.reply 'I am Five!'
 ```
 
@@ -114,7 +114,7 @@ robot.hear 'how old are you?', (res) ->
 如果 hubot 想要回复富文本消息，可以发送 `bearychat.attachment` 事件：
 
 ```
-robot.respond '念两句诗', (res) ->
+robot.respond /念两句诗/, (res) ->
   robot.emit 'bearychat.attachment',
     # required
     message: res.message
