@@ -115,6 +115,15 @@ robot.hear /how old are you?/, (res) ->
 
 ![art/res_reply.png](art/res_reply.png)
 
+### Send message to other room
+
+If you want to send a message to other channel use `robot.messageRoom` with vchannel_id， and Channel Name support is coming soon:
+
+```
+robot.hear /voldemort/i, (res) ->
+  robot.messageRoom(vchannel_id, "Somebody is talking about you, Voldemort!")
+```
+
 ### `bearychat.attachment`
 
 If hubot want to response more than text, emit `bearychat.attachment`:
