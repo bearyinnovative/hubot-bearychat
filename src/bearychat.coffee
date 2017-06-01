@@ -43,14 +43,8 @@ class BearyChatAdapter extends Adapter
 
   send: (envelope, strings...) ->
     if envelope.room # robot.messageRoom
-      vchannelId = envelope.room
-      tokens = (process.env.HUBOT_BEARYCHAT_TOKENS || '').split(',')
-      bearychat.message.create({
-        token: tokens[0],
-        vchannel_id: vchannelId,
-        text: strings[0],
-        attachments: []
-      })
+      message = {text: strings[0]}
+      @client.sendMessageToRoom envelope, message
     else
       message = @client.packMessage false, envelope, strings
       @client.sendMessage envelope, message

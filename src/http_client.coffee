@@ -25,10 +25,22 @@ class HTTPClient extends EventEmitter
       @emit(EventError, err)
       @robot.logger.error 'send message failed', err
 
+  sendMessageToRoom: (envelope, message) ->
+    vchannelId = envelope.room
+    bearychat.message.create({
+      token: @tokens[0],
+      vchannel_id: vchannelId,
+      text: message.text,
+      attachments: message.attachments or []
+    })
+
   packMessage: (isReply, envelope, [text, opts]) ->
     text = "@#{envelope.user.name}: #{text}" if isReply
-    Object.assign opts || {},{sender: envelope.user.sender,vchannel_id: envelope.user.vchannel,text: text}
-
+    Object.assign opts || {}, {
+      sender: envelope.user.sender,
+      vchannel_id: envelope.user.vchannel,
+      text: text
+    }
 
   receiveMessageCallback: (req, res) ->
     body = req.body
