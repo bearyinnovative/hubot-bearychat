@@ -1,4 +1,6 @@
 EventEmitter = require 'events'
+bearychat = require 'bearychat'
+
 {
   User,
   TextMessage,
@@ -17,20 +19,15 @@ class HTTPClient extends EventEmitter
     @emit EventConnected
 
   sendMessage: (envelope, message) ->
-    {_,token} = envelope.user
-    url = "https://bearychat.com/api/rtm/message"
-    message = Object.assign {token:token},message
-    message = JSON.stringify message
-
-    @robot.http(url)
-      .header('Content-Type', 'application/json')
-      .post(message) (err, res, body) =>
-        @robot.logger.debug(body)
-        @emit(EventError, err) if err
+    {token} = envelope.user
+    message = Object.assign {token: token, attachments: []}, message
+    bearychat.message.create(message).catch (err) =>
+      @emit(EventError, err)
+      @robot.logger.error 'send message failed', err
 
   packMessage: (isReply, envelope, [text, opts]) ->
     text = "@#{envelope.user.name}: #{text}" if isReply
-    Object.assign opts || {},{sender: envelope.user.sender,vchannel: envelope.user.vchannel,text: text}
+    Object.assign opts || {},{sender: envelope.user.sender,vchannel_id: envelope.user.vchannel,text: text}
 
 
   receiveMessageCallback: (req, res) ->
