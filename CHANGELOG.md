@@ -1,6 +1,13 @@
 ----
 - Name: hubot-bearychat
 ----
+# 0.7.0 / 2017-06-07
+
+## Added
+
+- 支持 `robot.messageRoom` 方法
+
+
 # 0.6.0 / 2017-05-16
 
 ## Added
