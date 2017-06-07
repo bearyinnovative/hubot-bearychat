@@ -1,7 +1,8 @@
 EventEmitter = require 'events'
 WebSocket = require 'ws'
 { User, TextMessage } = require 'hubot'
-{ rtm } = require 'bearychat'
+bearychat = require 'bearychat'
+rtm = bearychat.rtm
 
 {
   EventConnected,
@@ -90,6 +91,15 @@ class RTMClient extends EventEmitter
 
   sendMessage: (envelope, message) ->
     @writeWebSocket message
+
+  sendMessageToRoom: (envelope, message) ->
+    vchannelId = envelope.room
+    bearychat.message.create({
+      token: @token,
+      vchannel_id: vchannelId,
+      text: message.text,
+      attachments: []
+    })
 
   connectToRTM: (wsHost) ->
     @rtmCallId = 0

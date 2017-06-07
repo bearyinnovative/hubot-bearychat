@@ -109,6 +109,15 @@ robot.hear /how old are you?/, (res) ->
 
 ![art/res_reply.png](art/res_reply.png)
 
+### 向其他讨论组发消息
+
+如果想让 Hubot 往非当前对话的讨论组发送消息可以使用 `robot.messageRoom`， 参数是 vchannelId，讨论组名称也即将支持。
+
+```
+robot.hear /voldemort/i, (res) ->
+  robot.messageRoom(vchannel_id, "Somebody is talking about you, Voldemort!")
+```
+
 ### 富文本回复 `bearychat.attachment`
 
 如果 hubot 想要回复富文本消息，可以发送 `bearychat.attachment` 事件：
