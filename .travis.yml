@@ -6,3 +6,5 @@ node_js:
   - "5"
 script:
   - travis_retry npm run test
+notifications:
+    webhooks: https://hook.bearychat.com/=bw52O/travis/e0ca350e4af6b551b1707feb02795841
