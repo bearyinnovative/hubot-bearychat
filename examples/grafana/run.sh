@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export HUBOT_GRAFANA_HOST =
+export HUBOT_GRAFANA_API_KEY =
+
+export HUBOT_GRAFANA_S3_BUCKET =
+export HUBOT_GRAFANA_S3_ACCESS_KEY =
+export HUBOT_GRAFANA_S3_SECRET_KEY =
+export HUBOT_GRAFANA_S3_REGION =
+
+export HUBOT_BEARYCHAT_TOKENS =
+
+export HUBOT_BEARYCHAT_MODE=http
+
+bin/hubot --adapter bearychat
