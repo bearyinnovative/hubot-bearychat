@@ -42,12 +42,12 @@ class BearyChatAdapter extends Adapter
         .catch((err) => @robot.logger.error 'send message failed', err)
 
   send: (envelope, strings...) ->
-    if envelope.room # robot.messageRoom
-      message = {text: strings[0]}
-      @client.sendMessageToRoom envelope, message
-    else
+    if envelope.room and envelope.room.vchannelId
       message = @client.packMessage false, envelope, strings
       @client.sendMessage envelope, message
+    else # robot.messageRoom
+      message = {text: strings[0]}
+      @client.sendMessageToRoom envelope, message
 
   reply: (envelope, strings...) ->
     message = @client.packMessage true, envelope, strings
