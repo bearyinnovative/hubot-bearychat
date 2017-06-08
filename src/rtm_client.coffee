@@ -153,6 +153,8 @@ class RTMClient extends EventEmitter
 
     messageUser = new User fromUserId,
       message: message
+      room:
+        vchannelId: message.vchannel_id
 
     @emit EventMessage, new TextMessage messageUser, messageText, message.key
 
