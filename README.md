@@ -3,6 +3,7 @@
 This is a [Hubot](http://hubot.github.com/) adapter to use with [BearyChat](https://bearychat.com).
 
 [![@BearyChat](http://openapi.beary.chat/badge.svg)](http://openapi.beary.chat/join)
+[![Build Status](https://travis-ci.org/bearyinnovative/hubot-bearychat.svg)](https://travis-ci.org/bearyinnovative/hubot-bearychat)
 [![npm version](https://badge.fury.io/js/hubot-bearychat.svg)](https://npmjs.com/package/hubot-bearychat)
 
 [中文文档](./README_CN.md)

@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "8"
+  - "7"
+  - "6"
+  - "5"
+script:
+  - travis_retry npm run test
+notifications:
+    webhooks: https://hook.bearychat.com/=bw52O/travis/e0ca350e4af6b551b1707feb02795841

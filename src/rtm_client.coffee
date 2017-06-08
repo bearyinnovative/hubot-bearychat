@@ -4,6 +4,8 @@ WebSocket = require 'ws'
 bearychat = require 'bearychat'
 rtm = bearychat.rtm
 
+decodeMention = require('./helpers').decodeMention
+
 {
   EventConnected,
   EventMessage,
@@ -16,15 +18,6 @@ rtm = bearychat.rtm
 
 shouldHandleThisMessage = (message) ->
   rtm.message.isChatMessage(message)
-
-decodeMention = (text, userId, replaceName) ->
-  text.replace(
-    /(@)<=(.*?)=\>/g,
-    (_, mentionMark, mentionedUserId) ->
-      return replaceName if mentionedUserId is userId
-      mentionedUserId
-  )
-
 
 class RTMClient extends EventEmitter
   # a retry flow contains 3 parts: backoff waiting, ws url fetching and ws conecting.
