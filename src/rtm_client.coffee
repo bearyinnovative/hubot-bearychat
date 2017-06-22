@@ -74,6 +74,8 @@ class RTMClient extends EventEmitter
     else
       @robot.logger.info "Retry #{@retryTimes} times, reach to max, stop retry."
       @emit EventTimedout
+      @clearPingInterval()
+      @robot.shutdown()
 
   packMessage: (isReply, envelope, strings) ->
     text = strings.join '\n'
