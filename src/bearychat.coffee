@@ -8,6 +8,7 @@ RTMClient = require './rtm_client'
   EventMessage,
   EventClosed,
   EventError,
+  EventUserChanged,
 } = require './client_event'
 
 class BearyChatAdapter extends Adapter
@@ -21,9 +22,10 @@ class BearyChatAdapter extends Adapter
       @client = new RTMClient
 
     @client.on EventConnected, @handleConnected.bind(@)
-    @client.on EventMessage, @receive.bind(@)
+    @client.on EventMessage, @handleMessage.bind(@)
     @client.on EventClosed, @handleClosed.bind(@)
     @client.on EventError, @handleError.bind(@)
+    @client.on EventUserChanged, @handleUserChanged.bind(@)
 
   _setupEvents: (tokens) ->
     @robot.on 'bearychat.attachment', (data) =>
@@ -74,6 +76,28 @@ class BearyChatAdapter extends Adapter
 
   handleError: (e) ->
     @robot.logger.error "client error #{e}"
+
+  handleUserChanged: (event_or_user) ->
+    return unless event_or_user
+    user = if event_or_user.type == 'user_change' then event_or_user.user else event_or_user
+    newUser =
+      id: user.id
+      name: user.name
+
+    if user.id of @robot.brain.data.users
+      for key, value of @robot.brain.data.users[user.id]
+        continue unless key != 'id'
+        newUser[key] = value
+
+    @robot.brain.userForId user.id, newUser
+    return newUser
+
+  handleMessage: (message) ->
+    user = @handleUserChanged message.user
+    for key, value of user
+      continue unless key != 'id'
+      message.user[key] = value
+    @receive message
 
 exports.use = (robot) ->
   new BearyChatAdapter(robot)
